@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
-import { countryFlagEmoji, countryLabel } from "@/lib/countries";
+import { LetterCard } from "@/components/cake/LetterCard";
 import { useI18n } from "@/lib/i18n/context";
 import { useEditorStore } from "@/store/editorStore";
 import { useSubmissionStore } from "@/store/submissionStore";
@@ -66,16 +66,8 @@ export default function ReviewPage() {
         <CakeCanvas cakeData={present} candlesLit={false} />
       </div>
 
-      <div className="paper-card mt-4 p-4">
-        <div className="flex items-center gap-1.5 text-sm font-bold text-ink">
-          <span>{nickname}</span>
-          {country && (
-            <span className="text-xs font-normal text-ink-soft">
-              {countryFlagEmoji(country)} {countryLabel(country, locale)}
-            </span>
-          )}
-        </div>
-        <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed text-ink">{letter}</p>
+      <div className="mt-4">
+        <LetterCard nickname={nickname} country={country} letter={letter} locale={locale} />
       </div>
 
       <p className="mt-4 rounded-xl bg-berry/10 px-3 py-3 text-center text-xs font-semibold leading-relaxed text-berry">

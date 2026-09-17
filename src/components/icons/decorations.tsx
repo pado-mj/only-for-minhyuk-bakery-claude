@@ -180,37 +180,45 @@ export function RibbonBow(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-// Scalloped "fluffy" silhouettes for the Maltese — a plain circle reads as
-// a bald face, so the head/ears are wobbly cloud-shaped blobs instead to
-// suggest a fluffy 똥강아지 fur mop.
-const MALTESE_EAR_L =
-  "M 28 29.5 Q 28 29.5 31.4 33 Q 34.9 36.5 39.3 38.7 Q 43.7 40.9 41.5 45.3 Q 39.2 49.6 38.5 54.5 Q 37.7 59.3 32.9 58.5 Q 28 57.8 23.1 58.5 Q 18.3 59.3 17.6 54.5 Q 16.8 49.6 14.6 45.3 Q 12.3 40.9 16.7 38.7 Q 21.1 36.5 24.6 33 Z";
-const MALTESE_EAR_R =
-  "M 72 29.5 Q 72 29.5 75.5 33 Q 78.9 36.5 83.3 38.7 Q 87.7 40.9 85.5 45.3 Q 83.2 49.6 82.5 54.5 Q 81.7 59.3 76.8 58.5 Q 72 57.8 67.2 58.5 Q 62.3 59.3 61.5 54.5 Q 60.8 49.6 58.5 45.3 Q 56.3 40.9 60.7 38.7 Q 65.1 36.5 68.5 33 Z";
-const MALTESE_HEAD =
-  "M 50 28 Q 50 28 54.9 32.4 Q 59.7 36.7 66.2 37 Q 72.6 37.4 72.9 43.8 Q 73.3 50.3 77.7 55.1 Q 82 60 77.7 64.8 Q 73.3 69.7 72.9 76.2 Q 72.6 82.6 66.2 82.9 Q 59.7 83.3 54.9 87.7 Q 50 92 45.1 87.7 Q 40.3 83.3 33.8 82.9 Q 27.4 82.6 27 76.2 Q 26.7 69.7 22.4 64.8 Q 18 60 22.4 55.1 Q 26.7 50.3 27 43.8 Q 27.4 37.4 33.8 37 Q 40.3 36.7 45.1 32.4 Z";
-const MALTESE_FUR_FLICKS = [
-  "M30 40q-4-3-3-7",
-  "M70 40q4-3 3-7",
-  "M25 62q-4 1-5-3",
-  "M75 62q4 1 5-3",
-  "M35 82q-2 4-6 4",
-  "M65 82q2 4 6 4",
-];
+// A single cute round mascot pup (fluffy scalloped body + ears), reused
+// across three poses/accessories instead of three different dog breeds —
+// matches the reference mood board's "same mascot, different accessory"
+// pattern more closely than distinct breed illustrations did.
+const DOG_BODY =
+  "M 50 35.1 Q 50 35.1 55 37.7 Q 59.9 40.3 65.8 40.8 Q 71.6 41.4 73.3 45.9 Q 75 50.4 79 53.8 Q 83.1 57.3 80.8 61.6 Q 78.5 66 78.8 70.7 Q 79.1 75.4 73.8 77.6 Q 68.6 79.7 65 83.5 Q 61.5 87.3 55.8 86.2 Q 50 85.1 44.3 86.2 Q 38.5 87.3 35 83.5 Q 31.4 79.7 26.1 77.6 Q 20.9 75.4 21.2 70.7 Q 21.5 66 19.2 61.6 Q 16.9 57.3 20.9 53.8 Q 25 50.4 26.7 45.9 Q 28.4 41.4 34.3 40.8 Q 40.1 40.3 45 37.7 Z";
+const DOG_EAR_L =
+  "M 30 22.4 Q 30 22.4 32.5 24.4 Q 35 26.3 37.5 28.4 Q 39.9 30.4 39 33.6 Q 38.1 36.9 37.1 40.1 Q 36.1 43.4 33 43.5 Q 30 43.5 26.9 43.5 Q 23.9 43.4 22.9 40.1 Q 21.9 36.9 21 33.6 Q 20.1 30.4 22.6 28.4 Q 25 26.3 27.5 24.4 Z";
+const DOG_EAR_R =
+  "M 70 22.4 Q 70 22.4 72.5 24.4 Q 75 26.3 77.5 28.4 Q 79.9 30.4 79 33.6 Q 78.1 36.9 77.1 40.1 Q 76.1 43.4 73 43.5 Q 70 43.5 67 43.5 Q 63.9 43.4 62.9 40.1 Q 61.9 36.9 61 33.6 Q 60.1 30.4 62.5 28.4 Q 65 26.3 67.5 24.4 Z";
+
+function DogMascotBase({
+  earFill = "#F1D9DE",
+  children,
+}: {
+  earFill?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+    <>
+      <path d={DOG_EAR_L} fill={earFill} stroke={INK} strokeWidth={2.4} />
+      <path d={DOG_EAR_R} fill={earFill} stroke={INK} strokeWidth={2.4} />
+      <path d={DOG_BODY} fill="#FEFBF4" stroke={INK} strokeWidth={2.6} />
+      <ellipse cx="35" cy="66" rx="4.5" ry="3" fill="#F5B6C2" opacity={0.7} />
+      <ellipse cx="65" cy="66" rx="4.5" ry="3" fill="#F5B6C2" opacity={0.7} />
+      {children}
+      <ellipse cx="50" cy="70" rx="3.6" ry="2.8" fill={INK} />
+      <path d="M45 75c2.5 2.4 7.5 2.4 10 0" stroke={INK} strokeWidth={2} fill="none" strokeLinecap="round" />
+    </>
+  );
+}
 
 export function Maltese(props: SVGProps<SVGSVGElement>) {
   return (
     <Sticker {...props}>
-      <path d={MALTESE_EAR_L} fill="#EFE7D4" stroke={INK} strokeWidth={3} />
-      <path d={MALTESE_EAR_R} fill="#EFE7D4" stroke={INK} strokeWidth={3} />
-      <path d={MALTESE_HEAD} fill="#FBF8F0" stroke={INK} strokeWidth={3.2} />
-      {MALTESE_FUR_FLICKS.map((d, i) => (
-        <path key={i} d={d} stroke="#D9CDB2" strokeWidth={1.6} fill="none" strokeLinecap="round" />
-      ))}
-      <circle cx="41" cy="58" r="3" fill={INK} />
-      <circle cx="59" cy="58" r="3" fill={INK} />
-      <ellipse cx="50" cy="68" rx="4" ry="3" fill={INK} />
-      <path d="M44 74c3 3 9 3 12 0" stroke={INK} strokeWidth={2} fill="none" strokeLinecap="round" />
+      <DogMascotBase>
+        <circle cx="41" cy="60" r="3" fill={INK} />
+        <circle cx="59" cy="60" r="3" fill={INK} />
+      </DogMascotBase>
     </Sticker>
   );
 }
@@ -218,21 +226,13 @@ export function Maltese(props: SVGProps<SVGSVGElement>) {
 export function Chihuahua(props: SVGProps<SVGSVGElement>) {
   return (
     <Sticker {...props}>
-      <ellipse
-        cx="50"
-        cy="62"
-        rx="24"
-        ry="20"
-        fill="#E3A96B"
-        stroke={INK}
-        strokeWidth={5}
-      />
-      <path d="M28 46 20 20l16 14Z" fill="#E3A96B" stroke={INK} strokeWidth={4} />
-      <path d="M72 46 80 20 64 34Z" fill="#E3A96B" stroke={INK} strokeWidth={4} />
-      <circle cx="41" cy="58" r="3" fill="#3A2E22" />
-      <circle cx="59" cy="58" r="3" fill="#3A2E22" />
-      <ellipse cx="50" cy="67" rx="3.4" ry="2.6" fill="#5C3A22" />
-      <path d="M45 73c2.5 2.4 7.5 2.4 10 0" stroke="#5C3A22" strokeWidth={2} fill="none" strokeLinecap="round" />
+      <DogMascotBase earFill="#CFE0EE">
+        <rect x="34" y="57" width="12" height="8" rx="4" fill="#2F4157" />
+        <rect x="54" y="57" width="12" height="8" rx="4" fill="#2F4157" />
+        <path d="M46 61h8" stroke="#2F4157" strokeWidth={2} />
+        <path d="M32 59l-4-3" stroke="#2F4157" strokeWidth={2} strokeLinecap="round" />
+        <path d="M68 59l4-3" stroke="#2F4157" strokeWidth={2} strokeLinecap="round" />
+      </DogMascotBase>
     </Sticker>
   );
 }
@@ -240,21 +240,12 @@ export function Chihuahua(props: SVGProps<SVGSVGElement>) {
 export function GermanShepherd(props: SVGProps<SVGSVGElement>) {
   return (
     <Sticker {...props}>
-      <ellipse
-        cx="50"
-        cy="62"
-        rx="26"
-        ry="21"
-        fill="#C88A4C"
-        stroke={INK}
-        strokeWidth={5}
-      />
-      <path d="M50 44c-10 0-16 10-12 20 6-4 18-4 24 0 4-10-2-20-12-20Z" fill="#6B4423" />
-      <path d="M27 44 18 22l14 16Z" fill="#6B4423" stroke={INK} strokeWidth={4} />
-      <path d="M73 44 82 22 68 38Z" fill="#6B4423" stroke={INK} strokeWidth={4} />
-      <circle cx="42" cy="60" r="3" fill="#241a10" />
-      <circle cx="58" cy="60" r="3" fill="#241a10" />
-      <ellipse cx="50" cy="70" rx="3.6" ry="2.8" fill="#241a10" />
+      <path d="M50 16 40 26h20Z" fill="#CFE0EE" stroke={INK} strokeWidth={2.4} />
+      <circle cx="50" cy="14" r="3.4" fill="#F2C94C" stroke={INK} strokeWidth={1.6} />
+      <DogMascotBase earFill="#DCEFE3">
+        <circle cx="41" cy="60" r="3" fill={INK} />
+        <circle cx="59" cy="60" r="3" fill={INK} />
+      </DogMascotBase>
     </Sticker>
   );
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
+import { LetterCard } from "@/components/cake/LetterCard";
 import { isBirthdayLive } from "@/lib/birthday";
 import { countryFlagEmoji, countryLabel } from "@/lib/countries";
 import { useI18n } from "@/lib/i18n/context";
@@ -98,13 +99,13 @@ export function CakeDetailClient({ record }: { record: CakeRecord | null }) {
       <div className="mt-6">
         <AnimatePresence>
           {phase === "revealed" ? (
-            <motion.div
-              key="letter"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="paper-card p-5"
-            >
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink">{record.letter}</p>
+            <motion.div key="letter" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+              <LetterCard
+                nickname={record.nickname}
+                country={record.country}
+                letter={record.letter}
+                locale={locale}
+              />
             </motion.div>
           ) : (
             <motion.div

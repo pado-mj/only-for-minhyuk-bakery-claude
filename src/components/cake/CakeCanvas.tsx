@@ -55,7 +55,16 @@ export function CakeCanvas({
       {branding && (
         <div
           className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-[0.3cqw] pb-[2.5cqw] text-center"
-          style={{ textShadow: "0 1px 2px rgba(255,255,255,0.6)" }}
+          style={{
+            textShadow: "0 1px 2px rgba(255,255,255,0.6)",
+            // The PNG export skips embedding the Pretendard webfont (see
+            // complete/page.tsx — embedding it was hanging the export), so
+            // this falls through to the browser's default font unless we
+            // pin it to system CJK sans fonts here. Without this it rendered
+            // in the browser's raw serif default (looked like 명조체).
+            fontFamily:
+              '-apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif',
+          }}
         >
           <span className="font-bold tracking-wide text-ink" style={{ fontSize: "3.4cqw" }}>
             ONLY FOR MINHYUK BAKERY
