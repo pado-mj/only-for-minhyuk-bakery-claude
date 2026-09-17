@@ -101,11 +101,16 @@ function CompleteContent() {
         setTimeout(() => reject(new Error("timeout")), 10000)
       );
       const dataUrl = await Promise.race([capture, timeout]);
+      console.log("[save-image] dataUrl length", dataUrl.length);
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = `only-for-minhyuk-bakery-cake-${record.publicNumber}.png`;
+      document.body.appendChild(link);
       link.click();
-    } catch {
+      link.remove();
+      console.log("[save-image] click dispatched");
+    } catch (err) {
+      console.error("[save-image] failed", err);
       setSaveError(true);
       setTimeout(() => setSaveError(false), 2500);
     } finally {
