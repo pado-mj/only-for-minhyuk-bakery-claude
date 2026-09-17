@@ -5,7 +5,7 @@ import { useI18n } from "@/lib/i18n/context";
 import type { CakeRecord } from "@/types/cake";
 
 export function CakeTableItem({ cake }: { cake: CakeRecord }) {
-  const { t, locale } = useI18n();
+  const { locale } = useI18n();
   return (
     <Link
       href={`/cake/${cake.publicId}`}
@@ -25,9 +25,6 @@ export function CakeTableItem({ cake }: { cake: CakeRecord }) {
         </div>
         <p className="mt-1 line-clamp-2 text-xs leading-relaxed text-ink-soft">
           {cake.letter}
-        </p>
-        <p className="mt-1 text-[11px] text-ink-soft/70">
-          {t.home.madeBy} · #{cake.publicNumber}
         </p>
       </div>
     </Link>

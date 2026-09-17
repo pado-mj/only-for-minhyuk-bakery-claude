@@ -16,17 +16,19 @@ export function CakeCanvas({
   candlesLit = true,
   className = "",
   rounded = true,
+  branding,
 }: {
   cakeData: CakeData;
   candlesLit?: boolean;
   className?: string;
   rounded?: boolean;
+  branding?: { nickname: string; publicNumber: number };
 }) {
   const sorted = [...cakeData.objects].sort((a, b) => a.layer - b.layer || a.zIndex - b.zIndex);
   return (
     <div
       className={`paper-texture relative aspect-square w-full overflow-hidden ${rounded ? "rounded-2xl" : ""} ${className}`}
-      style={{ background: backgroundGradient(cakeData.background.color) }}
+      style={{ background: backgroundGradient(cakeData.background.color), containerType: "inline-size" }}
     >
       <div className="absolute left-1/2 top-[58%] w-[72%] -translate-x-1/2 -translate-y-1/2">
         <CakeBase color={cakeData.cakeColor} className="w-full" />
@@ -50,6 +52,19 @@ export function CakeCanvas({
           </div>
         );
       })}
+      {branding && (
+        <div
+          className="absolute inset-x-0 bottom-0 flex flex-col items-center gap-[0.3cqw] pb-[2.5cqw] text-center"
+          style={{ textShadow: "0 1px 2px rgba(255,255,255,0.6)" }}
+        >
+          <span className="font-bold tracking-wide text-ink" style={{ fontSize: "3.4cqw" }}>
+            ONLY FOR MINHYUK BAKERY
+          </span>
+          <span className="text-ink-soft" style={{ fontSize: "2.6cqw" }}>
+            made by {branding.nickname} · #{branding.publicNumber}
+          </span>
+        </div>
+      )}
     </div>
   );
 }

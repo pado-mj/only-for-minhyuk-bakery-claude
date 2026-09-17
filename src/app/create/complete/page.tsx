@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
@@ -16,7 +16,9 @@ function CompleteContent() {
   const lastCreated = useLastCreatedStore((s) => s.record);
   const [fetched, setFetched] = useState<CakeRecord | null | undefined>(undefined);
   const [copied, setCopied] = useState(false);
-  const [savingNote, setSavingNote] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const exportRef = useRef<HTMLDivElement>(null);
 
   const record = lastCreated?.publicId === publicId ? lastCreated : fetched;
 
@@ -79,12 +81,48 @@ function CompleteContent() {
     }
   };
 
+  const handleSaveImage = async () => {
+    if (!exportRef.current || saving) return;
+    setSaving(true);
+    setSaveError(false);
+    try {
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(exportRef.current, {
+        width: 1080,
+        height: 1080,
+        pixelRatio: 1,
+      });
+      const link = document.createElement("a");
+      link.href = dataUrl;
+      link.download = `only-for-minhyuk-bakery-cake-${record.publicNumber}.png`;
+      link.click();
+    } catch {
+      setSaveError(true);
+      setTimeout(() => setSaveError(false), 2500);
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="flex min-h-dvh flex-col items-center px-6 pb-10 pt-14 text-center">
       <h1 className="text-lg font-extrabold text-ink">{t.complete.title}</h1>
 
       <div className="mx-auto mt-6 w-56">
         <CakeCanvas cakeData={record.cakeData} candlesLit={false} />
+      </div>
+
+      {/* Off-screen, full-resolution, un-rounded version for PNG export —
+          includes the branding footer the on-screen preview doesn't need. */}
+      <div style={{ position: "fixed", top: 0, left: -10000, width: 1080, height: 1080 }} aria-hidden>
+        <div ref={exportRef} style={{ width: 1080, height: 1080 }}>
+          <CakeCanvas
+            cakeData={record.cakeData}
+            candlesLit={false}
+            rounded={false}
+            branding={{ nickname: record.nickname, publicNumber: record.publicNumber }}
+          />
+        </div>
       </div>
 
       <p className="mt-4 text-sm font-semibold text-ink">
@@ -96,13 +134,11 @@ function CompleteContent() {
 
       <div className="mt-6 flex w-full max-w-xs gap-2">
         <button
-          onClick={() => {
-            setSavingNote(true);
-            setTimeout(() => setSavingNote(false), 2000);
-          }}
-          className="flex-1 rounded-full bg-paper-dark py-3 text-xs font-bold text-ink-soft"
+          onClick={handleSaveImage}
+          disabled={saving}
+          className="flex-1 rounded-full bg-paper-dark py-3 text-xs font-bold text-ink-soft disabled:opacity-60"
         >
-          {t.complete.saveImage}
+          {saving ? t.complete.saving : t.complete.saveImage}
         </button>
         <button
           onClick={handleCopyLink}
@@ -112,7 +148,7 @@ function CompleteContent() {
         </button>
       </div>
       <div className="mt-2 h-4 text-[11px] font-semibold text-berry">
-        {copied ? t.complete.linkCopied : savingNote ? t.complete.saveComingSoon : ""}
+        {copied ? t.complete.linkCopied : saveError ? t.complete.saveError : ""}
       </div>
 
       <div className="mt-8 flex w-full max-w-xs flex-col gap-2.5">

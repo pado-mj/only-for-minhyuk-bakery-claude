@@ -43,23 +43,6 @@ export const DECORATION_ASSETS: DecorationAsset[] = [
   { id: "hate-mint-choco", category: "hate", labelKo: "민트초코", labelEn: "Mint Chocolate", labelJa: "ミントチョコ", Icon: MintChoco },
 ];
 
-// Tabs group several underlying categories together — fewer tabs, more
-// variety visible per tab, per user feedback ("카테고리를 많이 나누는 것보다
-// 한 카테고리에 여러 일러스트가 보였으면 좋겠어").
-export interface DecorationTabGroup {
-  id: string;
-  labelKo: string;
-  labelEn: string;
-  labelJa: string;
-  categories: DecorationCategory[];
-}
-
-export const DECORATION_TAB_GROUPS: DecorationTabGroup[] = [
-  { id: "animal", labelKo: "동물", labelEn: "Animals", labelJa: "どうぶつ", categories: ["dog", "whale"] },
-  { id: "hate", labelKo: "비호감", labelEn: "Hate", labelJa: "苦手なもの", categories: ["hate"] },
-  { id: "fruitFlower", labelKo: "과일 & 꽃", labelEn: "Fruit & Flowers", labelJa: "フルーツ&花", categories: ["fruit", "rose"] },
-  { id: "ribbon", labelKo: "리본", labelEn: "Ribbon", labelJa: "リボン", categories: ["ribbon"] },
-];
 
 export function getDecorationAsset(id: string) {
   return DECORATION_ASSETS.find((a) => a.id === id);

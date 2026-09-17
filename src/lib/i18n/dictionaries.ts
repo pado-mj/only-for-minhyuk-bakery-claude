@@ -5,7 +5,7 @@ export const dictionaries = {
   ko: {
     common: {
       brand: "ONLY FOR MINHYUK BAKERY",
-      tagline: "그의 생일상을 케이크와 축하 메시지로 채워요",
+      tagline: "민혁이의 생일을 축하하는 케이크를 만들어 주세요!",
       next: "다음",
       back: "이전",
       edit: "수정",
@@ -104,7 +104,8 @@ export const dictionaries = {
       saveImage: "이미지 저장",
       copyLink: "링크 복사",
       linkCopied: "링크를 복사했어요 ♡",
-      saveComingSoon: "이미지 저장은 곧 제공돼요.",
+      saving: "저장 중...",
+      saveError: "이미지 저장에 실패했어요. 다시 시도해 주세요.",
     },
     cakeDetail: {
       openLetter: "편지 열어보기",
@@ -219,7 +220,8 @@ export const dictionaries = {
       saveImage: "Save Image",
       copyLink: "Copy Link",
       linkCopied: "Link copied ♡",
-      saveComingSoon: "Image saving is coming soon.",
+      saving: "Saving...",
+      saveError: "Couldn't save the image. Please try again.",
     },
     cakeDetail: {
       openLetter: "Open the letter",
@@ -334,7 +336,8 @@ export const dictionaries = {
       saveImage: "画像を保存",
       copyLink: "リンクをコピー",
       linkCopied: "リンクをコピーしました ♡",
-      saveComingSoon: "画像保存機能は近日公開予定です。",
+      saving: "保存しています...",
+      saveError: "画像を保存できませんでした。もう一度お試しください。",
     },
     cakeDetail: {
       openLetter: "手紙を開く",
