@@ -3,7 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
-import { COUNTRY_CODES, countryFlagEmoji, countryLabel } from "@/lib/countries";
+import { COUNTRY_CODES, countryFlagEmoji } from "@/lib/countries";
+import { CountryLabel } from "@/components/ui/CountryLabel";
 import { useI18n } from "@/lib/i18n/context";
 import { useEditorStore } from "@/store/editorStore";
 import { useSubmissionStore } from "@/store/submissionStore";
@@ -54,7 +55,7 @@ export default function LetterPage() {
             <option value="">{t.countries.unset}</option>
             {COUNTRY_CODES.map((code) => (
               <option key={code} value={code}>
-                {countryFlagEmoji(code)} {countryLabel(code, locale)}
+                {countryFlagEmoji(code)} <CountryLabel code={code} locale={locale} />
               </option>
             ))}
           </select>

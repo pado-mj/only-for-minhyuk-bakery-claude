@@ -1,101 +1,108 @@
-import type { SVGProps } from "react";
+const CANDLES_DIR = "/assets/candles";
 
-const INK = "#3A2E22";
+// Wick-tip position as a fraction of each image's own box, measured from
+// the trimmed asset (topmost non-transparent pixel) — used to anchor the
+// flame overlay, since art doesn't include a lit flame.
+const CLASSIC_SOURCES = [
+  { src: `${CANDLES_DIR}/classic-0.png`, wickX: 0.491, wickY: 0.036 },
+  { src: `${CANDLES_DIR}/classic-1.png`, wickX: 0.542, wickY: 0.038 },
+  { src: `${CANDLES_DIR}/classic-2.png`, wickX: 0.529, wickY: 0.036 },
+  { src: `${CANDLES_DIR}/classic-3.png`, wickX: 0.541, wickY: 0.038 },
+  { src: `${CANDLES_DIR}/classic-4.png`, wickX: 0.463, wickY: 0.036 },
+  { src: `${CANDLES_DIR}/classic-5.png`, wickX: 0.505, wickY: 0.036 },
+  { src: `${CANDLES_DIR}/classic-6.png`, wickX: 0.516, wickY: 0.036 },
+];
 
-function Flame({ lit, cx = 50, cy = 14 }: { lit: boolean; cx?: number; cy?: number }) {
-  if (!lit) return null;
+const NUMBER_SOURCES: Record<number, { src: string; wickX: number; wickY: number }> = {
+  0: { src: `${CANDLES_DIR}/number-0.png`, wickX: 0.769, wickY: 0.362 },
+  1: { src: `${CANDLES_DIR}/number-1.png`, wickX: 0.533, wickY: 0.281 },
+  2: { src: `${CANDLES_DIR}/number-2.png`, wickX: 0.506, wickY: 0.051 },
+  3: { src: `${CANDLES_DIR}/number-3.png`, wickX: 0.65, wickY: 0.057 },
+  4: { src: `${CANDLES_DIR}/number-4.png`, wickX: 0.624, wickY: 0.057 },
+  5: { src: `${CANDLES_DIR}/number-5.png`, wickX: 0.576, wickY: 0.056 },
+  6: { src: `${CANDLES_DIR}/number-6.png`, wickX: 0.557, wickY: 0.053 },
+  7: { src: `${CANDLES_DIR}/number-7.png`, wickX: 0.522, wickY: 0.052 },
+  8: { src: `${CANDLES_DIR}/number-8.png`, wickX: 0.643, wickY: 0.052 },
+  9: { src: `${CANDLES_DIR}/number-9.png`, wickX: 0.574, wickY: 0.058 },
+};
+
+const HEART_SOURCE = { src: `${CANDLES_DIR}/heart-candle.png`, wickX: 0.7, wickY: 0.235 };
+const DOG_SOURCE = { src: `${CANDLES_DIR}/dog-candle.png`, wickX: 0.646, wickY: 0.354 };
+
+function Flame({ wickX, wickY }: { wickX: number; wickY: number }) {
   return (
-    <g className="candle-flame" style={{ transformOrigin: `${cx}px ${cy}px` }}>
-      <path
-        d={`M${cx} ${cy - 12}c5 6 6 10 3 15-1 2-4 3-3-1-3 3-6 1-6-3 0-5 3-8 6-11Z`}
-        fill="#F5A623"
-      />
-      <path
-        d={`M${cx} ${cy - 6}c2 3 2 5 0 7-2-1-3-3-2-5 0-1 1-2 2-2Z`}
-        fill="#FFE9A8"
-      />
-    </g>
+    <div
+      className="candle-flame absolute"
+      style={{
+        left: `${wickX * 100}%`,
+        top: `${wickY * 100}%`,
+        width: "62cqw",
+        transform: "translate(-50%, -82%)",
+      }}
+    >
+      <svg viewBox="0 0 20 26" className="h-full w-full overflow-visible">
+        <path
+          d="M10 0c5 6 6 10 3 15-1 2-4 3-3-1-3 3-6 1-6-3 0-5 3-8 6-11Z"
+          fill="#F5A623"
+        />
+        <path d="M10 6c2 3 2 5 0 7-2-1-3-3-2-5 0-1 1-2 2-2Z" fill="#FFE9A8" />
+      </svg>
+    </div>
+  );
+}
+
+function ImageCandle({
+  src,
+  wickX,
+  wickY,
+  lit,
+  className,
+}: {
+  src: string;
+  wickX: number;
+  wickY: number;
+  lit: boolean;
+  className?: string;
+}) {
+  return (
+    <div className={`relative ${className ?? ""}`} style={{ containerType: "inline-size" }}>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src={src} alt="" className="h-full w-full object-contain" draggable={false} />
+      {lit && <Flame wickX={wickX} wickY={wickY} />}
+    </div>
   );
 }
 
 export function ClassicCandle({
   lit = true,
-  color = "#E2708A",
-  ...props
-}: SVGProps<SVGSVGElement> & { lit?: boolean; color?: string }) {
-  return (
-    <svg viewBox="0 0 40 100" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="14" y="24" width="12" height="66" rx="3" fill={color} stroke={INK} strokeWidth={3} />
-      <rect x="14" y="34" width="12" height="6" fill="#FBF3E3" opacity={0.5} />
-      <rect x="14" y="54" width="12" height="6" fill="#FBF3E3" opacity={0.5} />
-      <rect x="14" y="74" width="12" height="6" fill="#FBF3E3" opacity={0.5} />
-      <path d="M20 24v-8" stroke="#3A2E22" strokeWidth={2} strokeLinecap="round" />
-      <Flame lit={lit} cx={20} cy={12} />
-    </svg>
-  );
+  variant = 0,
+  className,
+}: {
+  lit?: boolean;
+  variant?: number;
+  className?: string;
+}) {
+  const source = CLASSIC_SOURCES[Math.abs(variant) % CLASSIC_SOURCES.length];
+  return <ImageCandle {...source} lit={lit} className={className} />;
 }
 
-export function HeartCandle({ lit = true, ...props }: SVGProps<SVGSVGElement> & { lit?: boolean }) {
-  return (
-    <svg viewBox="0 0 50 100" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M25 92c-14-30-4-46 0-46s14 16 0 46Z"
-        fill="#C9425A"
-        stroke={INK}
-        strokeWidth={3}
-      />
-      <path
-        d="M25 34c-9-10-24-4-19 8 3 8 12 14 19 18 7-4 16-10 19-18 5-12-10-18-19-8Z"
-        fill="#C9425A"
-        stroke={INK}
-        strokeWidth={3}
-      />
-      <path d="M25 34v-10" stroke="#3A2E22" strokeWidth={2} strokeLinecap="round" />
-      <Flame lit={lit} cx={25} cy={20} />
-    </svg>
-  );
+export function HeartCandle({ lit = true, className }: { lit?: boolean; className?: string }) {
+  return <ImageCandle {...HEART_SOURCE} lit={lit} className={className} />;
 }
 
-export function DogCandle({ lit = true, ...props }: SVGProps<SVGSVGElement> & { lit?: boolean }) {
-  return (
-    <svg viewBox="0 0 50 100" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="17" y="46" width="16" height="44" rx="4" fill="#E3A96B" stroke={INK} strokeWidth={3} />
-      <circle cx="25" cy="34" r="16" fill="#E3A96B" stroke={INK} strokeWidth={3} />
-      <path d="M13 24 6 10l14 10Z" fill="#E3A96B" stroke={INK} strokeWidth={2} />
-      <path d="M37 24 44 10 30 20Z" fill="#E3A96B" stroke={INK} strokeWidth={2} />
-      <circle cx="20" cy="33" r="1.8" fill="#3A2E22" />
-      <circle cx="30" cy="33" r="1.8" fill="#3A2E22" />
-      <ellipse cx="25" cy="39" rx="2.4" ry="1.8" fill="#3A2E22" />
-      <path d="M25 18v-8" stroke="#3A2E22" strokeWidth={2} strokeLinecap="round" />
-      <Flame lit={lit} cx={25} cy={6} />
-    </svg>
-  );
+export function DogCandle({ lit = true, className }: { lit?: boolean; className?: string }) {
+  return <ImageCandle {...DOG_SOURCE} lit={lit} className={className} />;
 }
-
-const NUMBER_COLORS = ["#E2708A", "#F5A623", "#6FA858", "#4E7FA6", "#B23A55", "#C88A4C", "#7FC9B0", "#4C5B8F", "#C24B5C", "#3F5B7A"];
 
 export function NumberCandle({
   digit,
   lit = true,
-  ...props
-}: SVGProps<SVGSVGElement> & { digit: number; lit?: boolean }) {
-  const color = NUMBER_COLORS[digit % NUMBER_COLORS.length];
-  return (
-    <svg viewBox="0 0 40 100" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="10" y="24" width="20" height="66" rx="4" fill={color} stroke={INK} strokeWidth={3} />
-      <text
-        x="20"
-        y="63"
-        textAnchor="middle"
-        fontSize="30"
-        fontWeight={700}
-        fill="#FBF3E3"
-        fontFamily="var(--font-pretendard), sans-serif"
-      >
-        {digit}
-      </text>
-      <path d="M20 24v-8" stroke="#3A2E22" strokeWidth={2} strokeLinecap="round" />
-      <Flame lit={lit} cx={20} cy={12} />
-    </svg>
-  );
+  className,
+}: {
+  digit: number;
+  lit?: boolean;
+  className?: string;
+}) {
+  const source = NUMBER_SOURCES[digit] ?? NUMBER_SOURCES[0];
+  return <ImageCandle {...source} lit={lit} className={className} />;
 }

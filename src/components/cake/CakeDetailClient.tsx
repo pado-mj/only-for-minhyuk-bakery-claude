@@ -5,8 +5,10 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
 import { LetterCard } from "@/components/cake/LetterCard";
+import { CountryLabel } from "@/components/ui/CountryLabel";
 import { isBirthdayLive } from "@/lib/birthday";
-import { countryFlagEmoji, countryLabel } from "@/lib/countries";
+import { countryFlagEmoji } from "@/lib/countries";
+import { formatDate } from "@/lib/date";
 import { useI18n } from "@/lib/i18n/context";
 import type { CakeRecord } from "@/types/cake";
 
@@ -86,13 +88,13 @@ export function CakeDetailClient({ record }: { record: CakeRecord | null }) {
           <span>{record.nickname}</span>
           {record.country && (
             <span className="text-xs font-normal text-ink-soft">
-              {countryFlagEmoji(record.country)} {countryLabel(record.country, locale)}
+              {countryFlagEmoji(record.country)} <CountryLabel code={record.country} locale={locale} />
             </span>
           )}
         </div>
         <p className="mt-1 text-[11px] text-ink-soft">
           #{record.publicNumber} · {t.cakeDetail.created}{" "}
-          {new Date(record.createdAt).toLocaleDateString(locale)}
+          {formatDate(record.createdAt, locale)}
         </p>
       </div>
 

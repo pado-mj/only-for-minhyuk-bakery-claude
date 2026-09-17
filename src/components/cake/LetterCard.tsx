@@ -1,4 +1,5 @@
-import { countryFlagEmoji, countryLabel } from "@/lib/countries";
+import { CountryLabel } from "@/components/ui/CountryLabel";
+import { countryFlagEmoji } from "@/lib/countries";
 
 export function LetterCard({
   nickname,
@@ -29,7 +30,7 @@ export function LetterCard({
           <span>{nickname}</span>
           {country && (
             <span className="text-xs font-normal text-ink-soft">
-              {countryFlagEmoji(country)} {countryLabel(country, locale)}
+              {countryFlagEmoji(country)} <CountryLabel code={country} locale={locale} />
             </span>
           )}
         </div>

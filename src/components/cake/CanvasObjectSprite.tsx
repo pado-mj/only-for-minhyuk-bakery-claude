@@ -74,7 +74,7 @@ export function CanvasObjectSprite({
       const digit = Number(object.assetId.split("-")[1] ?? 0);
       return <NumberCandle digit={digit} lit={lit} className="h-full w-full" />;
     }
-    return <ClassicCandle lit={lit} className="h-full w-full" />;
+    return <ClassicCandle lit={lit} variant={object.zIndex} className="h-full w-full" />;
   }
 
   return null;

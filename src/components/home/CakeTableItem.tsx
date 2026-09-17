@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
-import { countryFlagEmoji, countryLabel } from "@/lib/countries";
+import { CountryLabel } from "@/components/ui/CountryLabel";
+import { countryFlagEmoji } from "@/lib/countries";
 import { useI18n } from "@/lib/i18n/context";
 import type { CakeRecord } from "@/types/cake";
 
@@ -19,7 +20,7 @@ export function CakeTableItem({ cake }: { cake: CakeRecord }) {
           <span className="truncate">{cake.nickname}</span>
           {cake.country && (
             <span className="shrink-0 text-xs text-ink-soft">
-              {countryFlagEmoji(cake.country)} {countryLabel(cake.country, locale)}
+              {countryFlagEmoji(cake.country)} <CountryLabel code={cake.country} locale={locale} />
             </span>
           )}
         </div>
