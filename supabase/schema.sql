@@ -50,6 +50,11 @@ create policy "public can read published cakes"
 -- table-level privilege before it even evaluates them. With "Automatically
 -- expose new tables" turned off in the Supabase dashboard (recommended —
 -- keeps access explicit), that base grant never happens automatically, so
--- it has to be done here.
-grant usage on schema public to anon, authenticated;
+-- it has to be done here. This applies even to service_role: RLS bypass is
+-- not the same thing as a GRANT, so without this the API route's own
+-- inserts fail with "permission denied for table cakes" (42501).
+grant usage on schema public to anon, authenticated, service_role;
 grant select on public.cakes to anon, authenticated;
+grant select, insert, update, delete on public.cakes to service_role;
+grant select, insert, update, delete on public.cake_views to service_role;
+grant usage, select on public.cakes_public_number_seq to service_role;

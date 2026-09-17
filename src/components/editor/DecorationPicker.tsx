@@ -1,36 +1,39 @@
 "use client";
 
 import { useState } from "react";
-import { DECORATION_ASSETS, DECORATION_CATEGORIES } from "@/lib/assets";
+import { DECORATION_ASSETS, DECORATION_TAB_GROUPS } from "@/lib/assets";
 import { useI18n } from "@/lib/i18n/context";
 import { useEditorStore } from "@/store/editorStore";
-import type { DecorationCategory } from "@/types/cake";
 
 export function DecorationPicker() {
-  const { t, locale } = useI18n();
-  const [category, setCategory] = useState<DecorationCategory>("dog");
+  const { locale } = useI18n();
+  const [tabId, setTabId] = useState(DECORATION_TAB_GROUPS[0].id);
   const addObject = useEditorStore((s) => s.addObject);
 
+  const tabLabel = (g: (typeof DECORATION_TAB_GROUPS)[number]) =>
+    locale === "ko" ? g.labelKo : locale === "ja" ? g.labelJa : g.labelEn;
   const assetLabel = (a: (typeof DECORATION_ASSETS)[number]) =>
     locale === "ko" ? a.labelKo : locale === "ja" ? a.labelJa : a.labelEn;
+
+  const activeGroup = DECORATION_TAB_GROUPS.find((g) => g.id === tabId) ?? DECORATION_TAB_GROUPS[0];
 
   return (
     <div>
       <div className="no-scrollbar mb-3 flex gap-2 overflow-x-auto">
-        {DECORATION_CATEGORIES.map((c) => (
+        {DECORATION_TAB_GROUPS.map((g) => (
           <button
-            key={c.id}
-            onClick={() => setCategory(c.id)}
+            key={g.id}
+            onClick={() => setTabId(g.id)}
             className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
-              category === c.id ? "bg-ink text-cream" : "bg-paper text-ink-soft"
+              tabId === g.id ? "bg-ink text-cream" : "bg-paper text-ink-soft"
             }`}
           >
-            {t.editor[c.id]}
+            {tabLabel(g)}
           </button>
         ))}
       </div>
       <div className="grid grid-cols-4 gap-3">
-        {DECORATION_ASSETS.filter((a) => a.category === category).map((asset) => (
+        {DECORATION_ASSETS.filter((a) => activeGroup.categories.includes(a.category)).map((asset) => (
           <button
             key={asset.id}
             onClick={() =>

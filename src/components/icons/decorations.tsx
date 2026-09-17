@@ -301,21 +301,43 @@ export function WhaleCute(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+// A ring of overlapping petals reads as a rose bloom; three concentric
+// circles just read as a target/lollipop, which was the complaint.
+const PETAL = "M0-3c9-11 9-24 0-27c-9 3-9 16 0 27Z";
+const PETAL_ANGLES = [0, 72, 144, 216, 288];
+
+function RoseBloom({ cx, cy, r }: { cx: number; cy: number; r: number }) {
+  const scale = r / 27;
+  return (
+    <g transform={`translate(${cx} ${cy})`}>
+      {PETAL_ANGLES.map((angle, i) => (
+        <path
+          key={i}
+          d={PETAL}
+          transform={`rotate(${angle}) scale(${scale})`}
+          fill={i % 2 === 0 ? "#C1435F" : "#B23A55"}
+          stroke={INK}
+          strokeWidth={2.5 / scale}
+        />
+      ))}
+      <circle r={r * 0.32} fill="#E17E92" stroke={INK} strokeWidth={2} />
+      <path
+        d={`M${-r * 0.12} ${-r * 0.1}c-3-3-1-7 3-7`}
+        stroke={INK}
+        strokeWidth={1.4}
+        fill="none"
+        strokeLinecap="round"
+      />
+    </g>
+  );
+}
+
 export function RoseSingle(props: SVGProps<SVGSVGElement>) {
   return (
     <Sticker {...props}>
-      <circle
-        cx="50"
-        cy="46"
-        r="22"
-        fill="#B23A55"
-        stroke={INK}
-        strokeWidth={6}
-      />
-      <circle cx="50" cy="46" r="14" fill="#CB5470" />
-      <circle cx="50" cy="46" r="7" fill="#E17E92" />
       <path d="M50 68v22" stroke="#5C8A4B" strokeWidth={4} strokeLinecap="round" />
-      <path d="M50 80c6-2 10-8 10-8s-8 0-10 8Zm0-2c-6-2-10-8-10-8s8 0 10 8Z" fill="#6FA858" />
+      <path d="M50 80c6-2 10-8 10-8s-8 0-10 8Zm0-2c-6-2-10-8-10-8s8 0 10 8Z" fill="#6FA858" stroke={INK} strokeWidth={1.5} />
+      <RoseBloom cx={50} cy={44} r={22} />
     </Sticker>
   );
 }
@@ -324,17 +346,13 @@ export function RoseStem(props: SVGProps<SVGSVGElement>) {
   return (
     <Sticker {...props}>
       <path d="M50 40v52" stroke="#5C8A4B" strokeWidth={4} strokeLinecap="round" />
-      <path d="M50 62c8-3 13-10 13-10s-9-1-13 10Zm0 12c-8-3-13-10-13-10s9-1 13 10Z" fill="#6FA858" />
-      <circle
-        cx="50"
-        cy="26"
-        r="18"
-        fill="#B23A55"
+      <path
+        d="M50 62c8-3 13-10 13-10s-9-1-13 10Zm0 12c-8-3-13-10-13-10s9-1 13 10Z"
+        fill="#6FA858"
         stroke={INK}
-        strokeWidth={6}
+        strokeWidth={1.5}
       />
-      <circle cx="50" cy="26" r="11" fill="#CB5470" />
-      <circle cx="50" cy="26" r="5" fill="#E17E92" />
+      <RoseBloom cx={50} cy={24} r={18} />
     </Sticker>
   );
 }

@@ -132,7 +132,7 @@ export async function POST(request: Request) {
 
   if (error) {
     console.error("cakes insert failed:", error);
-    return NextResponse.json({ error: "Failed to save cake", detail: error.message, code: error.code }, { status: 500 });
+    return NextResponse.json({ error: "Failed to save cake" }, { status: 500 });
   }
 
   return NextResponse.json({ publicId: data.public_id, publicNumber: data.public_number }, { status: 201 });
