@@ -13,9 +13,13 @@ export function LetterCard({
 }) {
   return (
     <div className="relative overflow-hidden rounded-2xl shadow-sm">
+      {/* paper-tile.png is a gap-free crop of the illustrated notepaper —
+          the full paper.png is a photo of a rotated note on a white
+          background, so object-cover on it could land a blank white
+          corner behind the text depending on the card's aspect ratio. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
-        src="/assets/letter/paper.png"
+        src="/assets/letter/paper-tile.png"
         alt=""
         className="absolute inset-0 h-full w-full object-cover"
         draggable={false}
