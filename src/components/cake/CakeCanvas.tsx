@@ -1,0 +1,55 @@
+import { CakeBase } from "@/components/icons/cake";
+import { CanvasObjectSprite } from "@/components/cake/CanvasObjectSprite";
+import { backgroundGradient } from "@/lib/color";
+import { CANVAS_SIZE } from "@/types/cake";
+import type { CakeData } from "@/types/cake";
+
+const BASE_SIZE_PERCENT: Record<string, number> = {
+  decoration: 13,
+  image: 22,
+  topper: 34,
+  candle: 9,
+};
+
+export function CakeCanvas({
+  cakeData,
+  candlesLit = true,
+  className = "",
+  rounded = true,
+}: {
+  cakeData: CakeData;
+  candlesLit?: boolean;
+  className?: string;
+  rounded?: boolean;
+}) {
+  const sorted = [...cakeData.objects].sort((a, b) => a.layer - b.layer || a.zIndex - b.zIndex);
+  return (
+    <div
+      className={`paper-texture relative aspect-square w-full overflow-hidden ${rounded ? "rounded-2xl" : ""} ${className}`}
+      style={{ background: backgroundGradient(cakeData.background.color) }}
+    >
+      <div className="absolute left-1/2 top-[58%] w-[72%] -translate-x-1/2 -translate-y-1/2">
+        <CakeBase color={cakeData.cakeColor} className="w-full" />
+      </div>
+      {sorted.map((object) => {
+        const basePercent = BASE_SIZE_PERCENT[object.type] ?? 14;
+        const sizePercent = basePercent * object.scale;
+        return (
+          <div
+            key={object.id}
+            className="absolute"
+            style={{
+              left: `${(object.x / CANVAS_SIZE) * 100}%`,
+              top: `${(object.y / CANVAS_SIZE) * 100}%`,
+              width: `${sizePercent}%`,
+              transform: `translate(-50%, -50%) rotate(${object.rotation}deg)`,
+              containerType: "inline-size",
+            }}
+          >
+            <CanvasObjectSprite object={object} lit={candlesLit} />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
