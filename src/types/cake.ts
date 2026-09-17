@@ -1,11 +1,17 @@
 export type ObjectLayer = 2 | 3 | 4 | 5;
 
+export type CakeShape = "whole" | "piece" | "cut" | "twoTier";
+
 export type DecorationCategory =
   | "fruit"
+  | "flower"
   | "ribbon"
   | "dog"
   | "whale"
-  | "rose"
+  | "symbol"
+  | "accessory"
+  | "art"
+  | "music"
   | "hate";
 
 export type ObjectType = "image" | "decoration" | "topper" | "candle";
@@ -34,6 +40,7 @@ export interface CakeBackground {
 export interface CakeData {
   background: CakeBackground;
   cakeColor: string;
+  cakeShape?: CakeShape;
   objects: CanvasObject[];
 }
 
