@@ -87,11 +87,20 @@ function CompleteContent() {
     setSaveError(false);
     try {
       const { toPng } = await import("html-to-image");
-      const dataUrl = await toPng(exportRef.current, {
+      // skipFonts: without it, html-to-image walks every stylesheet on the
+      // page trying to fetch+embed every @font-face it finds — Pretendard
+      // Variable is large enough that this can hang for a very long time.
+      // The export doesn't need custom font fidelity, so skip it.
+      const capture = toPng(exportRef.current, {
         width: 1080,
         height: 1080,
         pixelRatio: 1,
+        skipFonts: true,
       });
+      const timeout = new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("timeout")), 10000)
+      );
+      const dataUrl = await Promise.race([capture, timeout]);
       const link = document.createElement("a");
       link.href = dataUrl;
       link.download = `only-for-minhyuk-bakery-cake-${record.publicNumber}.png`;
