@@ -45,3 +45,11 @@ create policy "public can read published cakes"
 
 -- cake_views has no public policies at all: only the service-role key
 -- (server-side) ever touches it.
+
+-- RLS policies only filter *rows* — Postgres still requires the base
+-- table-level privilege before it even evaluates them. With "Automatically
+-- expose new tables" turned off in the Supabase dashboard (recommended —
+-- keeps access explicit), that base grant never happens automatically, so
+-- it has to be done here.
+grant usage on schema public to anon, authenticated;
+grant select on public.cakes to anon, authenticated;

@@ -32,10 +32,10 @@ export function CanvasObjectSprite({
     const isDark = object.textStyle === "dark";
     return (
       <div
-        className={`w-full rounded-full border-2 text-center font-bold leading-tight sticker-shadow ${
+        className={`w-full rounded-2xl border-2 text-center font-bold leading-tight sticker-shadow ${
           isDark ? "bg-navy text-cream border-navy" : "bg-cream text-ink border-ink"
         }`}
-        style={{ fontSize: "22cqw", padding: "0.4em 0.9em" }}
+        style={{ fontSize: "13cqw", padding: "0.55em 0.85em" }}
       >
         {object.text}
       </div>

@@ -100,6 +100,14 @@ export function BirthdayTable({
     return () => observer.disconnect();
   }, [ordered.length]);
 
+  if (ordered.length === 0) {
+    return (
+      <div className="px-6 pb-28 pt-10 text-center">
+        <p className="text-sm text-ink-soft">{t.home.empty}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="px-4 pb-28 pt-4" style={{ perspective: 900 }}>
       <p className="mb-5 text-center text-xs text-ink-soft">{t.home.scrollHint}</p>

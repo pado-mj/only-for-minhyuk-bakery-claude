@@ -1,19 +1,60 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
-import { getSubmission } from "@/lib/mock/submissions";
+import { createSupabaseClient } from "@/lib/supabase/client";
 import { useI18n } from "@/lib/i18n/context";
+import { useLastCreatedStore } from "@/store/lastCreatedStore";
+import type { CakeRecord } from "@/types/cake";
 
 function CompleteContent() {
   const { t } = useI18n();
   const searchParams = useSearchParams();
   const publicId = searchParams.get("id") ?? "";
-  const record = getSubmission(publicId);
+  const lastCreated = useLastCreatedStore((s) => s.record);
+  const [fetched, setFetched] = useState<CakeRecord | null | undefined>(undefined);
   const [copied, setCopied] = useState(false);
   const [savingNote, setSavingNote] = useState(false);
+
+  const record = lastCreated?.publicId === publicId ? lastCreated : fetched;
+
+  useEffect(() => {
+    // Direct load / refresh of this URL loses the in-memory "just created"
+    // record — fall back to reading it straight from Supabase by public id.
+    if (lastCreated?.publicId === publicId || !publicId) return;
+    let cancelled = false;
+    createSupabaseClient()
+      .from("cakes")
+      .select(
+        "id, public_id, public_number, nickname, country, letter, cake_data, view_count, created_at, status"
+      )
+      .eq("public_id", publicId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (cancelled) return;
+        if (!data) {
+          setFetched(null);
+          return;
+        }
+        setFetched({
+          id: data.id,
+          publicId: data.public_id,
+          publicNumber: data.public_number,
+          nickname: data.nickname,
+          country: data.country ?? undefined,
+          letter: data.letter,
+          cakeData: data.cake_data,
+          viewCount: data.view_count,
+          createdAt: data.created_at,
+          status: data.status,
+        });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [publicId, lastCreated]);
 
   if (!record) {
     return (

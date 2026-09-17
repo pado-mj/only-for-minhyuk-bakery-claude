@@ -1,7 +1,10 @@
 import { HomeClient } from "@/components/home/HomeClient";
-import { getMockStats, MOCK_CAKES } from "@/lib/mock/cakes";
+import { computeStats, fetchPublishedCakes } from "@/lib/supabase/queries";
 
-export default function HomePage() {
-  const stats = getMockStats();
-  return <HomeClient cakes={MOCK_CAKES} stats={stats} />;
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const cakes = await fetchPublishedCakes();
+  const stats = computeStats(cakes);
+  return <HomeClient cakes={cakes} stats={stats} />;
 }

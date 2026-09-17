@@ -7,7 +7,7 @@ import type { CakeData } from "@/types/cake";
 const BASE_SIZE_PERCENT: Record<string, number> = {
   decoration: 13,
   image: 22,
-  topper: 34,
+  topper: 46,
   candle: 9,
 };
 

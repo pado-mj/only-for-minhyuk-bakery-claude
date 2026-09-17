@@ -4,17 +4,15 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
-import { getSubmission } from "@/lib/mock/submissions";
-import { getMockCakeByPublicId } from "@/lib/mock/cakes";
 import { isBirthdayLive } from "@/lib/birthday";
 import { countryFlagEmoji, countryLabel } from "@/lib/countries";
 import { useI18n } from "@/lib/i18n/context";
+import type { CakeRecord } from "@/types/cake";
 
 type Phase = "closed" | "extinguishing" | "revealed";
 
-export function CakeDetailClient({ publicId }: { publicId: string }) {
+export function CakeDetailClient({ record }: { record: CakeRecord | null }) {
   const { t, locale } = useI18n();
-  const record = getSubmission(publicId) ?? getMockCakeByPublicId(publicId);
   const [live, setLive] = useState(false);
   const [phase, setPhase] = useState<Phase>("closed");
 

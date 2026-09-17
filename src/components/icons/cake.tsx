@@ -1,3 +1,4 @@
+import { useId } from "react";
 import type { SVGProps } from "react";
 
 const OUTLINE = "#FBF3E3";
@@ -15,27 +16,95 @@ function shade(hex: string, amount: number) {
   return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
 }
 
+const SPRINKLE_COLORS = ["#F2C94C", "#6FA858", "#E2708A", "#4E7FA6"];
+const SPRINKLES = [
+  { x: 108, y: 236, r: 4 },
+  { x: 292, y: 248, r: 4.5 },
+  { x: 150, y: 264, r: 3.5 },
+  { x: 250, y: 224, r: 4 },
+  { x: 200, y: 258, r: 3.5 },
+];
+const DRIPS = [
+  { x: 146, h: 20 },
+  { x: 182, h: 30 },
+  { x: 218, h: 16 },
+  { x: 254, h: 26 },
+];
+
 export function CakeBase({ color = "#F3D9B1", ...props }: SVGProps<SVGSVGElement> & { color?: string }) {
-  const dark = shade(color, -30);
-  const light = shade(color, 18);
+  const gradId = useId();
+  const light = shade(color, 26);
+  const dark = shade(color, -26);
+  const frosting = "#FFF8EA";
+
   return (
-    <svg viewBox="0 0 400 320" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <ellipse cx="200" cy="284" rx="150" ry="20" fill="#00000014" />
-      <rect x="60" y="180" width="280" height="90" rx="14" fill={dark} stroke={OUTLINE} strokeWidth={6} style={outlineStyle} />
-      <path
-        d="M60 190c0-16 20-24 30-16 10-10 30-10 40 0 10-10 30-10 40 0 10-10 30-10 40 0 10-10 30-10 40 0 10-8 30 0 30 16v-6c0 20-20 30-30 22-10 10-30 10-40 0-10 10-30 10-40 0-10 10-30 10-40 0-10 10-30 10-40 0-10 8-30-2-30-22Z"
-        fill={color}
+    <svg viewBox="0 0 400 340" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <defs>
+        <linearGradient id={`${gradId}-body`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={light} />
+          <stop offset="100%" stopColor={dark} />
+        </linearGradient>
+      </defs>
+
+      <ellipse cx="200" cy="312" rx="150" ry="14" fill="#00000014" />
+      <ellipse cx="200" cy="302" rx="170" ry="20" fill="#FFFBF2" stroke="#E6D8BE" strokeWidth={3} />
+
+      {/* bottom tier */}
+      <rect
+        x="64"
+        y="196"
+        width="272"
+        height="92"
+        rx="20"
+        fill={`url(#${gradId}-body)`}
         stroke={OUTLINE}
         strokeWidth={6}
         style={outlineStyle}
       />
-      <path
-        d="M70 172c30-16 60 10 90-4 30-14 60 12 90-2 20-10 40-2 50 8"
-        fill="none"
-        stroke={light}
+      {SPRINKLES.map((s, i) => (
+        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill={SPRINKLE_COLORS[i % SPRINKLE_COLORS.length]} opacity={0.85} />
+      ))}
+
+      {/* top tier */}
+      <rect
+        x="128"
+        y="150"
+        width="144"
+        height="70"
+        rx="16"
+        fill={`url(#${gradId}-body)`}
+        stroke={OUTLINE}
         strokeWidth={6}
-        strokeLinecap="round"
-        opacity={0.8}
+        style={outlineStyle}
+      />
+
+      {/* frosting drips hanging from the top tier's cap */}
+      {DRIPS.map((d, i) => (
+        <rect
+          key={i}
+          x={d.x}
+          y={148}
+          width={16}
+          height={d.h}
+          rx={8}
+          fill={frosting}
+          stroke={OUTLINE}
+          strokeWidth={3}
+          style={outlineStyle}
+        />
+      ))}
+
+      {/* frosting cap */}
+      <rect
+        x="122"
+        y="136"
+        width="156"
+        height="24"
+        rx="12"
+        fill={frosting}
+        stroke={OUTLINE}
+        strokeWidth={5}
+        style={outlineStyle}
       />
     </svg>
   );

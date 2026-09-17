@@ -1,14 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CakeCanvas } from "@/components/cake/CakeCanvas";
 import { countryFlagEmoji, countryLabel } from "@/lib/countries";
-import { generatePublicId } from "@/lib/id";
-import { addSubmission } from "@/lib/mock/submissions";
-import { MOCK_CAKES } from "@/lib/mock/cakes";
 import { useI18n } from "@/lib/i18n/context";
 import { useEditorStore } from "@/store/editorStore";
 import { useSubmissionStore } from "@/store/submissionStore";
+import { useLastCreatedStore } from "@/store/lastCreatedStore";
 
 export default function ReviewPage() {
   const { t, locale } = useI18n();
@@ -16,24 +15,47 @@ export default function ReviewPage() {
   const present = useEditorStore((s) => s.present);
   const markSubmitted = useEditorStore((s) => s.markSubmitted);
   const { nickname, country, letter } = useSubmissionStore();
+  const setLastCreated = useLastCreatedStore((s) => s.setRecord);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleComplete = () => {
-    const publicNumber = MOCK_CAKES[0]?.publicNumber ? MOCK_CAKES[0].publicNumber + 1 : 1;
-    const record = {
-      id: generatePublicId(),
-      publicId: generatePublicId(),
-      publicNumber,
-      nickname: nickname.trim(),
-      country,
-      letter: letter.trim(),
-      cakeData: present,
-      viewCount: 0,
-      createdAt: new Date().toISOString(),
-      status: "published" as const,
-    };
-    addSubmission(record);
-    markSubmitted();
-    router.push(`/create/complete?id=${record.publicId}`);
+  const handleComplete = async () => {
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/cakes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nickname: nickname.trim(),
+          country,
+          letter: letter.trim(),
+          cakeData: present,
+        }),
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const { publicId, publicNumber } = (await res.json()) as {
+        publicId: string;
+        publicNumber: number;
+      };
+      setLastCreated({
+        id: publicId,
+        publicId,
+        publicNumber,
+        nickname: nickname.trim(),
+        country,
+        letter: letter.trim(),
+        cakeData: present,
+        viewCount: 0,
+        createdAt: new Date().toISOString(),
+        status: "published",
+      });
+      markSubmitted();
+      router.push(`/create/complete?id=${publicId}`);
+    } catch {
+      setError(t.review.submitError);
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -60,18 +82,24 @@ export default function ReviewPage() {
         {t.review.warning}
       </p>
 
+      {error && (
+        <p className="mt-3 text-center text-xs font-semibold text-berry">{error}</p>
+      )}
+
       <div className="mt-5 flex gap-2">
         <button
           onClick={() => router.push("/create/decorate")}
-          className="flex-1 rounded-full bg-paper-dark py-3.5 text-sm font-bold text-ink-soft"
+          disabled={submitting}
+          className="flex-1 rounded-full bg-paper-dark py-3.5 text-sm font-bold text-ink-soft disabled:opacity-50"
         >
           {t.common.edit}
         </button>
         <button
           onClick={handleComplete}
-          className="flex-1 rounded-full bg-berry py-3.5 text-sm font-bold text-cream shadow-lg transition-transform active:scale-[0.98]"
+          disabled={submitting}
+          className="flex-1 rounded-full bg-berry py-3.5 text-sm font-bold text-cream shadow-lg transition-transform active:scale-[0.98] disabled:opacity-60"
         >
-          {t.review.complete}
+          {submitting ? t.review.submitting : t.review.complete}
         </button>
       </div>
     </div>

@@ -29,6 +29,7 @@ export const dictionaries = {
       madeBy: "만든 사람",
       scrollHint: "스크롤해서 생일상을 따라가 보세요",
       loadingCakes: "케이크를 불러오는 중...",
+      empty: "아직 케이크가 없어요. 첫 번째 케이크를 만들어 보세요!",
     },
     editor: {
       title: "케이크 꾸미기",
@@ -91,6 +92,8 @@ export const dictionaries = {
       warning:
         "완료 후에는 케이크와 편지를 수정하거나 삭제할 수 없어요. 신중하게 확인해 주세요.",
       complete: "완료하기",
+      submitting: "케이크를 올리는 중...",
+      submitError: "케이크를 올리지 못했어요. 잠시 후 다시 시도해 주세요.",
     },
     complete: {
       title: "♡ 케이크가 완성됐어요 ♡",
@@ -141,6 +144,7 @@ export const dictionaries = {
       madeBy: "made by",
       scrollHint: "Scroll to walk down the birthday table",
       loadingCakes: "Loading cakes...",
+      empty: "No cakes yet. Be the first to make one!",
     },
     editor: {
       title: "Decorate your cake",
@@ -203,6 +207,8 @@ export const dictionaries = {
       warning:
         "After completion, your cake and letter will be published on the Birthday Table and cannot be edited or deleted.",
       complete: "Complete",
+      submitting: "Publishing your cake...",
+      submitError: "Couldn't publish your cake. Please try again in a moment.",
     },
     complete: {
       title: "♡ YOUR CAKE IS READY ♡",
@@ -253,6 +259,7 @@ export const dictionaries = {
       madeBy: "made by",
       scrollHint: "スクロールして誕生日テーブルを進んでいこう",
       loadingCakes: "ケーキを読み込み中...",
+      empty: "まだケーキがありません。最初のケーキを作ってみましょう!",
     },
     editor: {
       title: "ケーキをデコレーション",
@@ -315,6 +322,8 @@ export const dictionaries = {
       warning:
         "完了後はケーキと手紙を編集・削除できません。よく確認してください。",
       complete: "完了する",
+      submitting: "ケーキを公開しています...",
+      submitError: "ケーキを公開できませんでした。しばらくしてからもう一度お試しください。",
     },
     complete: {
       title: "♡ ケーキが完成しました ♡",

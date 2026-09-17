@@ -19,6 +19,7 @@ export function HomeClient({
   const [focusId, setFocusId] = useState<string | undefined>(undefined);
 
   const handleRandom = useCallback(() => {
+    if (cakes.length === 0) return;
     const pick = cakes[Math.floor(Math.random() * cakes.length)];
     setMode("new");
     setFocusId(pick?.publicId);
