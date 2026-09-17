@@ -8,7 +8,7 @@ import type { DecorationCategory } from "@/types/cake";
 
 export function DecorationPicker() {
   const { t, locale } = useI18n();
-  const [category, setCategory] = useState<DecorationCategory>("fruit");
+  const [category, setCategory] = useState<DecorationCategory>("dog");
   const addObject = useEditorStore((s) => s.addObject);
 
   const assetLabel = (a: (typeof DECORATION_ASSETS)[number]) =>

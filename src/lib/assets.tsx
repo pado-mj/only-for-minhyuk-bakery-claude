@@ -44,12 +44,12 @@ export const DECORATION_ASSETS: DecorationAsset[] = [
 ];
 
 export const DECORATION_CATEGORIES: { id: DecorationCategory; labelKo: string; labelEn: string; labelJa: string }[] = [
-  { id: "fruit", labelKo: "과일", labelEn: "Fruit", labelJa: "フルーツ" },
-  { id: "ribbon", labelKo: "리본", labelEn: "Ribbon", labelJa: "リボン" },
   { id: "dog", labelKo: "강아지", labelEn: "Dog", labelJa: "犬" },
   { id: "whale", labelKo: "고래", labelEn: "Whale", labelJa: "クジラ" },
-  { id: "rose", labelKo: "장미", labelEn: "Rose", labelJa: "バラ" },
   { id: "hate", labelKo: "비호감", labelEn: "Hate", labelJa: "苦手なもの" },
+  { id: "fruit", labelKo: "과일", labelEn: "Fruit", labelJa: "フルーツ" },
+  { id: "ribbon", labelKo: "리본", labelEn: "Ribbon", labelJa: "リボン" },
+  { id: "rose", labelKo: "장미", labelEn: "Rose", labelJa: "バラ" },
 ];
 
 export function getDecorationAsset(id: string) {

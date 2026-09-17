@@ -1,8 +1,7 @@
 import { useId } from "react";
 import type { SVGProps } from "react";
 
-const OUTLINE = "#FBF3E3";
-const outlineStyle = { paintOrder: "stroke" as const };
+const INK = "#3A2E22";
 
 function shade(hex: string, amount: number) {
   const n = hex.replace("#", "");
@@ -57,9 +56,8 @@ export function CakeBase({ color = "#F3D9B1", ...props }: SVGProps<SVGSVGElement
         height="92"
         rx="20"
         fill={`url(#${gradId}-body)`}
-        stroke={OUTLINE}
+        stroke={INK}
         strokeWidth={6}
-        style={outlineStyle}
       />
       {SPRINKLES.map((s, i) => (
         <circle key={i} cx={s.x} cy={s.y} r={s.r} fill={SPRINKLE_COLORS[i % SPRINKLE_COLORS.length]} opacity={0.85} />
@@ -73,9 +71,8 @@ export function CakeBase({ color = "#F3D9B1", ...props }: SVGProps<SVGSVGElement
         height="70"
         rx="16"
         fill={`url(#${gradId}-body)`}
-        stroke={OUTLINE}
+        stroke={INK}
         strokeWidth={6}
-        style={outlineStyle}
       />
 
       {/* frosting drips hanging from the top tier's cap */}
@@ -88,9 +85,8 @@ export function CakeBase({ color = "#F3D9B1", ...props }: SVGProps<SVGSVGElement
           height={d.h}
           rx={8}
           fill={frosting}
-          stroke={OUTLINE}
+          stroke={INK}
           strokeWidth={3}
-          style={outlineStyle}
         />
       ))}
 
@@ -102,9 +98,8 @@ export function CakeBase({ color = "#F3D9B1", ...props }: SVGProps<SVGSVGElement
         height="24"
         rx="12"
         fill={frosting}
-        stroke={OUTLINE}
+        stroke={INK}
         strokeWidth={5}
-        style={outlineStyle}
       />
     </svg>
   );
