@@ -12,7 +12,19 @@ export function CanvasObjectSprite({
   if (object.type === "decoration") {
     const asset = getDecorationAsset(object.assetId);
     if (!asset) return null;
+    if (asset.imageSrc) {
+      return (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={asset.imageSrc}
+          alt=""
+          className="h-full w-full object-contain sticker-shadow"
+          draggable={false}
+        />
+      );
+    }
     const { Icon } = asset;
+    if (!Icon) return null;
     return <Icon className="h-full w-full sticker-shadow" />;
   }
 

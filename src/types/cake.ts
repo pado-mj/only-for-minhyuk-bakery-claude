@@ -6,7 +6,9 @@ export type DecorationCategory =
   | "dog"
   | "whale"
   | "rose"
-  | "hate";
+  | "hate"
+  | "animal"
+  | "decor";
 
 export type ObjectType = "image" | "decoration" | "topper" | "candle";
 

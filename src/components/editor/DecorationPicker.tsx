@@ -30,7 +30,12 @@ export function DecorationPicker() {
           }
           className="paper-card flex flex-col items-center gap-1 p-2 transition-transform active:scale-95"
         >
-          <asset.Icon className="h-10 w-10" />
+          {asset.imageSrc ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={asset.imageSrc} alt="" className="h-10 w-10 object-contain" draggable={false} />
+          ) : asset.Icon ? (
+            <asset.Icon className="h-10 w-10" />
+          ) : null}
           <span className="text-[11px] text-ink-soft">{assetLabel(asset)}</span>
         </button>
       ))}
